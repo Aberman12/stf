@@ -176,23 +176,18 @@ if(JSON.stringify(array) === JSON.stringify([1,2,2,3,4,4])){
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    var se;
-    if(!accumulator){
-      accumulator = collection[0];
-    }
-    console.log('-');
-for(var i = 0; i < collection.length; i++){
-  if(iterator(accumulator,collection[i]) !== undefined){
-      se = iterator(accumulator,collection[i]);
-    accumulator += se;
-  }
+    if (Array.isArray(collection)){
+          var result = collection.slice();
+          if (arguments[2] === undefined) {
+            accumulator = collection[0];
+            result = collection.slice(1);
+          }
+        }
+        _.each(result || collection, function(num) {
+          accumulator = iterator(accumulator, num);
+        });
 
-    console.log(se);
-
-
-}
-console.log(accumulator)
-return accumulator;
+        return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
